@@ -3,52 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A Special Surprise For You! 🎉</title>
+    <title>System Error... ⚠️</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            background: #0a0a1a;
-            color: white;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #000;
+            color: #ff3333;
+            font-family: 'Courier New', Courier, monospace;
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             overflow: hidden;
             text-align: center;
+            user-select: none;
         }
-        /* Background Animated Glow */
-        .bg-glow {
-            position: absolute; width: 100%; height: 100%;
-            background: radial-gradient(circle, rgba(255,0,128,0.2) 0%, rgba(0,0,0,0) 70%);
-            z-index: 1;
-        }
-        /* Gift Box Wrapper */
-        .envelope-wrapper {
-            z-index: 10;
-            cursor: pointer;
-            transition: transform 0.5s;
-        }
-        .envelope-wrapper:hover { transform: scale(1.05); }
-        .gift-box { font-size: 6rem; animation: bounce 2s infinite; }
-        @keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-20px); } 60% { transform: translateY(-10px); } }
-        .click-text { font-size: 1.2rem; color: #ff477e; font-weight: bold; margin-top: 10px; letter-spacing: 2px; }
 
-        /* Main Birthday Card */
+        /* Glitch Layer (Fake Screen Freeze/Crash Effect) */
+        .glitch-screen {
+            position: absolute; width: 100%; height: 100%;
+            background: #050505;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            z-index: 999;
+        }
+        .error-box { font-size: 1.5rem; font-weight: bold; padding: 20px; line-height: 2; }
+        
+        /* Screen Shake Animation during prank */
+        .shake-effect { animation: crashShake 0.1s infinite; color: red; }
+        @keyframes crashShake {
+            0% { transform: translate(2px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            30% { transform: translate(0px, 2px) rotate(0deg); }
+            50% { transform: translate(-2px, 1px) rotate(1deg); }
+            70% { transform: translate(2px, 1px) rotate(-1deg); }
+            100% { transform: translate(-1px, -2px) rotate(0deg); }
+        }
+
+        /* Main Birthday Card (Hidden during prank) */
         .card {
             display: none;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: linear-gradient(135deg, #1e1e38 0%, #0a0a1a 100%);
+            border: 2px solid rgba(255, 71, 126, 0.5);
             padding: 40px 30px;
             border-radius: 25px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            backdrop-filter: blur(20px);
+            box-shadow: 0 0 30px rgba(255, 71, 126, 0.3);
             max-width: 90%; width: 480px;
-            animation: unfold 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            animation: unfold 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
             z-index: 10;
+            color: white;
+            font-family: 'Segoe UI', sans-serif;
         }
-        @keyframes unfold { 0% { transform: scale(0) rotate(-10deg); opacity: 0; } 100% { transform: scale(1) rotate(0deg); opacity: 1; } }
+        @keyframes unfold { 0% { transform: scale(0); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
         
         h1 {
             font-size: 2.8rem;
@@ -58,109 +65,97 @@
             margin-bottom: 10px;
         }
         .name-container {
-            font-size: 3.2rem; font-weight: 900;
-            color: #fff; text-shadow: 0 0 10px #ff477e, 0 0 20px #ff477e, 0 0 40px #ff477e;
-            margin-bottom: 25px; letter-spacing: 1px;
+            font-size: 3.5rem; font-weight: 900;
+            color: #fff; text-shadow: 0 0 10px #ff477e, 0 0 20px #b5179e;
+            margin-bottom: 25px;
         }
-        p { font-size: 1.2rem; color: #e0e0e0; line-height: 1.7; margin-bottom: 30px; }
-        
-        /* Interactive Cake */
-        .cake-container { font-size: 4rem; margin-bottom: 20px; position: relative; display: inline-block; cursor: pointer;}
-        .candle-flame {
-            position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
-            font-size: 1.5rem; animation: flicker 0.5s infinite alternate;
-        }
-        @keyframes flicker { 0% { opacity: 0.8; transform: translateX(-50%) scale(0.9); } 100% { opacity: 1; transform: translateX(-50%) scale(1.1); } }
+        p { font-size: 1.2rem; color: #e0e0e0; line-height: 1.7; }
 
-        /* Floating Elements */
+        /* Floating Balloons */
         .balloon {
             position: absolute; width: 45px; height: 55px; border-radius: 50%;
             bottom: -100px; animation: floatUp 7s linear infinite; opacity: 0.6; z-index: 2;
         }
         @keyframes floatUp {
-            0% { bottom: -100px; transform: translateX(0) rotate(0deg); }
-            50% { transform: translateX(30px) rotate(10deg); }
-            100% { bottom: 110vh; transform: translateX(-30px) rotate(-10deg); }
+            0% { bottom: -100px; transform: translateX(0); }
+            50% { transform: translateX(30px); }
+            100% { bottom: 110vh; transform: translateX(-30px); }
         }
     </style>
 </head>
 <body>
 
-    <div class="bg-glow"></div>
-
-    <div class="envelope-wrapper" id="giftSection" onclick="openSurprise()">
-        <div class="gift-box">🎁</div>
-        <div class="click-text">TAP TO OPEN YOUR SURPRISE ✨</div>
+    <div class="glitch-screen" id="glitchBox">
+        <div class="error-box" id="errorText">
+            [SYSTEM CRITICAL ERROR]<br>
+            Loading Script... 12%<br>
+            <span style="color: #666;">Memory Address Overload: 0x7FFF5FBFF608</span>
+        </div>
     </div>
 
     <div class="card" id="birthdayCard">
-        <h1>✨ HAPPY BIRTHDAY ✨</h1>
+        <h1>✨ GOTCHA! HAPPY BIRTHDAY ✨</h1>
         <div class="name-container" id="friendName">My Best Friend</div>
-        
-        <div class="cake-container" onclick="blowCandle()">
-            <span class="candle-flame" id="flame">🔥</span>
-            🎂
-        </div>
-        <p id="instruction" style="font-size: 0.9rem; color: #ff477e; margin-bottom: 15px;">Tap the cake to blow out the candle! 🕯️</p>
-
-        <p>Allah pak aap ki zindagi me dheron khushiyan, kamyabi aur lambi umar ata farmaye. Hamesha hanste muskurate raho aur aise hi mere bday pe achi party dete raho! 🥳🎈</p>
+        <div style="font-size: 4rem; margin-bottom: 20px;">🎂🥳🎉</div>
+        <p>Hahaha hang ho gaye na? 😜 Allah pak aap ki zindagi me dheron khushiyan, kamyabi aur lambi umar ata farmaye. Hamesha hanste muskurate raho! 🎈</p>
     </div>
 
     <audio id="bdayMusic" src="https://actions.google.com/sounds/v1/events/happy_birthday.ogg" loop></audio>
 
     <script>
-        // Get Name from Link
+        // Get Name from URL
         const urlParams = new URLSearchParams(window.location.search);
         const name = urlParams.get('name');
         if (name) {
             document.getElementById('friendName').innerText = decodeURIComponent(name);
         }
 
-        // Open Surprise, Fire Crackers & Play Music
-        function openSurprise() {
-            document.getElementById('giftSection').style.display = 'none';
-            document.getElementById('birthdayCard').style.display = 'block';
+        const glitchBox = document.getElementById('glitchBox');
+        const errorText = document.getElementById('errorText');
+
+        // Prank Timeline Simulation
+        setTimeout(() => {
+            errorText.innerHTML = "[⚠️ SYSTEM CRASH WARNING ⚠️]<br>Device overheating... Unresponsive UI.<br>Trying to reboot device...";
+        }, 1500);
+
+        setTimeout(() => {
+            // Screen shakes violently like it's broken
+            glitchBox.classList.add('shake-effect');
+            errorText.innerHTML = "FATAL ERROR: CACHE_FREEZE<br>Partition corrupted.<br>DELETE ALL DATA? [YES]";
+            errorText.style.fontSize = "1.8rem";
+        }, 3000);
+
+        // The Grand Surprise Reveal at 5.5 Seconds
+        setTimeout(() => {
+            glitchBox.style.display = 'none'; // Remove prank screen
+            document.body.style.background = '#0a0a1a'; // Change to beautiful background
+            document.getElementById('birthdayCard').style.display = 'block'; // Show card
             
-            // Play Music on User Click (Fixes Browser Block Policy)
+            // Play Music
             const music = document.getElementById('bdayMusic');
-            music.play().catch(error => console.log("Audio play blocked: ", error));
+            music.play().catch(e => console.log(e));
 
-            // Blast Confetti / Patakhe
+            // Continuous Confetti Blast
             triggerConfetti();
-            setInterval(triggerConfetti, 2500); 
-        }
+            setInterval(triggerConfetti, 2500);
+        }, 5500);
 
-        // Blow Candle Interactive Function
-        function blowCandle() {
-            const flame = document.getElementById('flame');
-            if(flame.style.display !== 'none') {
-                flame.style.display = 'none';
-                document.getElementById('instruction').innerText = "Candle blown! Make a wish! 🌟";
-                
-                // Extra massive blast on blowing candle
-                confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
-            }
-        }
-
-        // Professional Confetti Crackers Function
+        // Confetti function
         function triggerConfetti() {
-            var duration = 2 * 1000;
-            var end = Date.now() + duration;
-
+            var end = Date.now() + (2 * 1000);
             (function frame() {
-                confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 } });
-                confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 } });
+                confetti({ particleCount: 4, angle: 60, spread: 55, origin: { x: 0 } });
+                confetti({ particleCount: 4, angle: 120, spread: 55, origin: { x: 1 } });
                 if (Date.now() < end) { requestAnimationFrame(frame); }
             }());
         }
 
-        // Auto Floating Balloons in Background
+        // Balloons
         function createBalloon() {
-            const colors = ['#ff477e', '#7209b7', '#4cc9f0', '#f72585', '#480ca8', '#f77f00'];
+            const colors = ['#ff477e', '#7209b7', '#4cc9f0', '#f72585'];
             const balloon = document.createElement('div');
             balloon.classList.add('balloon');
-            const randomColor = colors[Math.floor(Math.random() * colors.length)];
-            balloon.style.backgroundColor = randomColor;
+            balloon.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
             balloon.style.left = Math.random() * 100 + 'vw';
             balloon.style.animationDuration = (Math.random() * 3 + 5) + 's';
             document.body.appendChild(balloon);
