@@ -35,7 +35,7 @@
         @keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-20px); } 60% { transform: translateY(-10px); } }
         .click-text { font-size: 1.2rem; color: #ff477e; font-weight: bold; margin-top: 10px; letter-spacing: 2px; }
 
-        /* Main Birthday Card (Hidden initially) */
+        /* Main Birthday Card */
         .card {
             display: none;
             background: rgba(255, 255, 255, 0.1);
@@ -106,7 +106,7 @@
         <p>Allah pak aap ki zindagi me dheron khushiyan, kamyabi aur lambi umar ata farmaye. Hamesha hanste muskurate raho aur aise hi mere bday pe achi party dete raho! 🥳🎈</p>
     </div>
 
-    <iframe id="audioTrack" width="1" height="1" src="https://www.youtube.com/embed/zO2vV9vrcS4?enablejsapi=1" frameborder="0" allow="autoplay" style="display:none;"></iframe>
+    <audio id="bdayMusic" src="https://actions.google.com/sounds/v1/events/happy_birthday.ogg" loop></audio>
 
     <script>
         // Get Name from Link
@@ -116,18 +116,18 @@
             document.getElementById('friendName').innerText = decodeURIComponent(name);
         }
 
-        // Open Surprise & Fire Crackers
+        // Open Surprise, Fire Crackers & Play Music
         function openSurprise() {
             document.getElementById('giftSection').style.display = 'none';
             document.getElementById('birthdayCard').style.display = 'block';
             
-            // Start Music
-            const iframe = document.getElementById('audioTrack');
-            iframe.src += "&autoplay=1";
+            // Play Music on User Click (Fixes Browser Block Policy)
+            const music = document.getElementById('bdayMusic');
+            music.play().catch(error => console.log("Audio play blocked: ", error));
 
             // Blast Confetti / Patakhe
             triggerConfetti();
-            setInterval(triggerConfetti, 2500); // Repeat blast every 2.5 seconds
+            setInterval(triggerConfetti, 2500); 
         }
 
         // Blow Candle Interactive Function
