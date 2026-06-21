@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday! 🎉</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);
+            font-family: 'Segoe UI', sans-serif;
+            height: 100vh; display: flex; justify-content: center; align-items: center;
+            overflow: hidden; text-align: center;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.85); padding: 40px 30px; border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15); backdrop-filter: blur(10px);
+            max-width: 90%; width: 450px; animation: scaleUp 0.8s ease-out forwards; transform: scale(0); z-index: 10;
+        }
+        @keyframes scaleUp { to { transform: scale(1); } }
+        h1 { color: #ff477e; font-size: 2.5rem; margin-bottom: 10px; }
+        .name-container { font-size: 2.8rem; font-weight: bold; color: #7209b7; margin-bottom: 20px; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        p { font-size: 1.2rem; color: #4a4a4a; line-height: 1.6; margin-bottom: 25px; }
+        .btn {
+            background: linear-gradient(45deg, #ff477e, #ff7096); color: white; border: none;
+            padding: 12px 28px; font-size: 1.1rem; border-radius: 50px; cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 71, 126, 0.4); transition: 0.3s ease;
+        }
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(255, 71, 126, 0.6); }
+        .balloon { position: absolute; width: 50px; height: 65px; border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%; bottom: -100px; animation: floatUp 8s linear infinite; opacity: 0.8; }
+        .balloon::after { content: "▲"; font-size: 8px; position: absolute; bottom: -6px; left: 20px; color: inherit; }
+        @keyframes floatUp { 0% { bottom: -100px; transform: translateX(0); } 50% { transform: translateX(20px); } 100% { bottom: 105vh; transform: translateX(-20px); } }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>✨ Happy Birthday ✨</h1>
+        <div class="name-container" id="friendName">My Friend</div>
+        <p>Allah pak aap ki zindagi me dheron khushiyan, kamyabi aur lambi umar ata farmaye. Hamesha hanste muskurate raho! 🎂🥳</p>
+        <button class="btn" onclick="celebrate()">Click for Surprise 🎉</button>
+    </div>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const name = urlParams.get('name');
+        if (name) { document.getElementById('friendName').innerText = decodeURIComponent(name); }
+        function createBalloon() {
+            const colors = ['#ff477e', '#ff7096', '#ff85a1', '#7209b7', '#4cc9f0', '#f72585'];
+            const balloon = document.createElement('div'); balloon.classList.add('balloon');
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            balloon.style.backgroundColor = randomColor; balloon.style.color = randomColor;
+            balloon.style.left = Math.random() * 100 + 'vw'; balloon.style.animationDuration = (Math.random() * 4 + 4) + 's';
+            document.body.appendChild(balloon);
+            setTimeout(() => { balloon.remove(); }, 8000);
+        }
+        setInterval(createBalloon, 600);
+        function celebrate() {
+            for(let i = 0; i < 20; i++) { setTimeout(createBalloon, i * 100); }
+            alert("A very Happy Birthday to you! May all your dreams come true! 🎈🎁");
+        }
+    </script>
+</body>
+</html>
