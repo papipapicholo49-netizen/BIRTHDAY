@@ -3,61 +3,170 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Birthday! 🎉</title>
+    <title>A Special Surprise For You! 🎉</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);
-            font-family: 'Segoe UI', sans-serif;
-            height: 100vh; display: flex; justify-content: center; align-items: center;
-            overflow: hidden; text-align: center;
+            background: #0a0a1a;
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            text-align: center;
         }
+        /* Background Animated Glow */
+        .bg-glow {
+            position: absolute; width: 100%; height: 100%;
+            background: radial-gradient(circle, rgba(255,0,128,0.2) 0%, rgba(0,0,0,0) 70%);
+            z-index: 1;
+        }
+        /* Gift Box Wrapper */
+        .envelope-wrapper {
+            z-index: 10;
+            cursor: pointer;
+            transition: transform 0.5s;
+        }
+        .envelope-wrapper:hover { transform: scale(1.05); }
+        .gift-box { font-size: 6rem; animation: bounce 2s infinite; }
+        @keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-20px); } 60% { transform: translateY(-10px); } }
+        .click-text { font-size: 1.2rem; color: #ff477e; font-weight: bold; margin-top: 10px; letter-spacing: 2px; }
+
+        /* Main Birthday Card (Hidden initially) */
         .card {
-            background: rgba(255, 255, 255, 0.85); padding: 40px 30px; border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15); backdrop-filter: blur(10px);
-            max-width: 90%; width: 450px; animation: scaleUp 0.8s ease-out forwards; transform: scale(0); z-index: 10;
+            display: none;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 40px 30px;
+            border-radius: 25px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            backdrop-filter: blur(20px);
+            max-width: 90%; width: 480px;
+            animation: unfold 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            z-index: 10;
         }
-        @keyframes scaleUp { to { transform: scale(1); } }
-        h1 { color: #ff477e; font-size: 2.5rem; margin-bottom: 10px; }
-        .name-container { font-size: 2.8rem; font-weight: bold; color: #7209b7; margin-bottom: 20px; animation: pulse 2s infinite; }
-        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
-        p { font-size: 1.2rem; color: #4a4a4a; line-height: 1.6; margin-bottom: 25px; }
-        .btn {
-            background: linear-gradient(45deg, #ff477e, #ff7096); color: white; border: none;
-            padding: 12px 28px; font-size: 1.1rem; border-radius: 50px; cursor: pointer;
-            box-shadow: 0 5px 15px rgba(255, 71, 126, 0.4); transition: 0.3s ease;
+        @keyframes unfold { 0% { transform: scale(0) rotate(-10deg); opacity: 0; } 100% { transform: scale(1) rotate(0deg); opacity: 1; } }
+        
+        h1 {
+            font-size: 2.8rem;
+            background: linear-gradient(45deg, #ff477e, #b5179e, #4cc9f0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
         }
-        .btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(255, 71, 126, 0.6); }
-        .balloon { position: absolute; width: 50px; height: 65px; border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%; bottom: -100px; animation: floatUp 8s linear infinite; opacity: 0.8; }
-        .balloon::after { content: "▲"; font-size: 8px; position: absolute; bottom: -6px; left: 20px; color: inherit; }
-        @keyframes floatUp { 0% { bottom: -100px; transform: translateX(0); } 50% { transform: translateX(20px); } 100% { bottom: 105vh; transform: translateX(-20px); } }
+        .name-container {
+            font-size: 3.2rem; font-weight: 900;
+            color: #fff; text-shadow: 0 0 10px #ff477e, 0 0 20px #ff477e, 0 0 40px #ff477e;
+            margin-bottom: 25px; letter-spacing: 1px;
+        }
+        p { font-size: 1.2rem; color: #e0e0e0; line-height: 1.7; margin-bottom: 30px; }
+        
+        /* Interactive Cake */
+        .cake-container { font-size: 4rem; margin-bottom: 20px; position: relative; display: inline-block; cursor: pointer;}
+        .candle-flame {
+            position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
+            font-size: 1.5rem; animation: flicker 0.5s infinite alternate;
+        }
+        @keyframes flicker { 0% { opacity: 0.8; transform: translateX(-50%) scale(0.9); } 100% { opacity: 1; transform: translateX(-50%) scale(1.1); } }
+
+        /* Floating Elements */
+        .balloon {
+            position: absolute; width: 45px; height: 55px; border-radius: 50%;
+            bottom: -100px; animation: floatUp 7s linear infinite; opacity: 0.6; z-index: 2;
+        }
+        @keyframes floatUp {
+            0% { bottom: -100px; transform: translateX(0) rotate(0deg); }
+            50% { transform: translateX(30px) rotate(10deg); }
+            100% { bottom: 110vh; transform: translateX(-30px) rotate(-10deg); }
+        }
     </style>
 </head>
 <body>
-    <div class="card">
-        <h1>✨ Happy Birthday ✨</h1>
-        <div class="name-container" id="friendName">My Friend</div>
-        <p>Allah pak aap ki zindagi me dheron khushiyan, kamyabi aur lambi umar ata farmaye. Hamesha hanste muskurate raho! 🎂🥳</p>
-        <button class="btn" onclick="celebrate()">Click for Surprise 🎉</button>
+
+    <div class="bg-glow"></div>
+
+    <div class="envelope-wrapper" id="giftSection" onclick="openSurprise()">
+        <div class="gift-box">🎁</div>
+        <div class="click-text">TAP TO OPEN YOUR SURPRISE ✨</div>
     </div>
+
+    <div class="card" id="birthdayCard">
+        <h1>✨ HAPPY BIRTHDAY ✨</h1>
+        <div class="name-container" id="friendName">My Best Friend</div>
+        
+        <div class="cake-container" onclick="blowCandle()">
+            <span class="candle-flame" id="flame">🔥</span>
+            🎂
+        </div>
+        <p id="instruction" style="font-size: 0.9rem; color: #ff477e; margin-bottom: 15px;">Tap the cake to blow out the candle! 🕯️</p>
+
+        <p>Allah pak aap ki zindagi me dheron khushiyan, kamyabi aur lambi umar ata farmaye. Hamesha hanste muskurate raho aur aise hi mere bday pe achi party dete raho! 🥳🎈</p>
+    </div>
+
+    <iframe id="audioTrack" width="1" height="1" src="https://www.youtube.com/embed/zO2vV9vrcS4?enablejsapi=1" frameborder="0" allow="autoplay" style="display:none;"></iframe>
+
     <script>
+        // Get Name from Link
         const urlParams = new URLSearchParams(window.location.search);
         const name = urlParams.get('name');
-        if (name) { document.getElementById('friendName').innerText = decodeURIComponent(name); }
+        if (name) {
+            document.getElementById('friendName').innerText = decodeURIComponent(name);
+        }
+
+        // Open Surprise & Fire Crackers
+        function openSurprise() {
+            document.getElementById('giftSection').style.display = 'none';
+            document.getElementById('birthdayCard').style.display = 'block';
+            
+            // Start Music
+            const iframe = document.getElementById('audioTrack');
+            iframe.src += "&autoplay=1";
+
+            // Blast Confetti / Patakhe
+            triggerConfetti();
+            setInterval(triggerConfetti, 2500); // Repeat blast every 2.5 seconds
+        }
+
+        // Blow Candle Interactive Function
+        function blowCandle() {
+            const flame = document.getElementById('flame');
+            if(flame.style.display !== 'none') {
+                flame.style.display = 'none';
+                document.getElementById('instruction').innerText = "Candle blown! Make a wish! 🌟";
+                
+                // Extra massive blast on blowing candle
+                confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
+            }
+        }
+
+        // Professional Confetti Crackers Function
+        function triggerConfetti() {
+            var duration = 2 * 1000;
+            var end = Date.now() + duration;
+
+            (function frame() {
+                confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 } });
+                confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 } });
+                if (Date.now() < end) { requestAnimationFrame(frame); }
+            }());
+        }
+
+        // Auto Floating Balloons in Background
         function createBalloon() {
-            const colors = ['#ff477e', '#ff7096', '#ff85a1', '#7209b7', '#4cc9f0', '#f72585'];
-            const balloon = document.createElement('div'); balloon.classList.add('balloon');
+            const colors = ['#ff477e', '#7209b7', '#4cc9f0', '#f72585', '#480ca8', '#f77f00'];
+            const balloon = document.createElement('div');
+            balloon.classList.add('balloon');
             const randomColor = colors[Math.floor(Math.random() * colors.length)];
-            balloon.style.backgroundColor = randomColor; balloon.style.color = randomColor;
-            balloon.style.left = Math.random() * 100 + 'vw'; balloon.style.animationDuration = (Math.random() * 4 + 4) + 's';
+            balloon.style.backgroundColor = randomColor;
+            balloon.style.left = Math.random() * 100 + 'vw';
+            balloon.style.animationDuration = (Math.random() * 3 + 5) + 's';
             document.body.appendChild(balloon);
-            setTimeout(() => { balloon.remove(); }, 8000);
+            setTimeout(() => { balloon.remove(); }, 7000);
         }
-        setInterval(createBalloon, 600);
-        function celebrate() {
-            for(let i = 0; i < 20; i++) { setTimeout(createBalloon, i * 100); }
-            alert("A very Happy Birthday to you! May all your dreams come true! 🎈🎁");
-        }
+        setInterval(createBalloon, 800);
     </script>
 </body>
 </html>
